@@ -781,61 +781,83 @@
 
         let filteredResources = [...resources];
 
-        function renderResources() {
-            const container = document.getElementById('resourcesContainer');
-            const stats = document.getElementById('stats');
-            
-            if (filteredResources.length === 0) {
-                container.innerHTML = `
-                    <div class="no-results">
-                        <h3>No resources found</h3>
-                        <p>Try adjusting your filters or search terms</p>
-                    </div>
-                `;
-                stats.textContent = 'No resources match your filters';
-                return;
-            }
+        let currentPage = 1;
+const resourcesPerPage = 10;
 
-            stats.textContent = `Showing ${filteredResources.length} of ${resources.length} resources`;
+function renderResources() {
+    const container = document.getElementById('resourcesContainer');
+    const stats = document.getElementById('stats');
+    
+    if (filteredResources.length === 0) {
+        container.innerHTML = `
+            <div class="no-results">
+                <h3>No resources found</h3>
+                <p>Try adjusting your filters or search terms</p>
+            </div>
+        `;
+        stats.textContent = 'No resources match your filters';
+        return;
+    }
 
-            container.innerHTML = filteredResources.map(resource => `
-                <div class="resource-card">
-                    <div class="resource-header">
-                        <h2 class="resource-title">${resource.name}</h2>
-                        <span class="resource-category">${resource.category}</span>
-                    </div>
-                    <p class="resource-description">${resource.description}</p>
-                    <div class="resource-meta">
-                        <span class="meta-tag level">${resource.level}</span>
-                        <span class="meta-tag cost">${resource.cost}</span>
-                        <span class="meta-tag language">${resource.language}</span>
-                    </div>
-                    <a href="${resource.link}" target="_blank" class="resource-link">Visit Resource →</a>
-                </div>
-            `).join('');
-        }
+    const totalToShow = currentPage * resourcesPerPage;
+    const resourcesToShow = filteredResources.slice(0, totalToShow);
+    const hasMore = totalToShow < filteredResources.length;
 
-        function applyFilters() {
-            const category = document.getElementById('categoryFilter').value;
-            const level = document.getElementById('levelFilter').value;
-            const cost = document.getElementById('costFilter').value;
-            const language = document.getElementById('languageFilter').value;
-            const search = document.getElementById('searchBox').value.toLowerCase();
+    stats.textContent = `Showing ${resourcesToShow.length} of ${filteredResources.length} resources`;
 
-            filteredResources = resources.filter(resource => {
-                const matchesCategory = !category || resource.category === category;
-                const matchesLevel = !level || resource.level === level;
-                const matchesCost = !cost || resource.cost === cost;
-                const matchesLanguage = !language || resource.language === language;
-                const matchesSearch = !search || 
-                    resource.name.toLowerCase().includes(search) || 
-                    resource.description.toLowerCase().includes(search);
+    container.innerHTML = resourcesToShow.map(resource => `
+        <div class="resource-card">
+            <div class="resource-header">
+                <h2 class="resource-title">${resource.name}</h2>
+                <span class="resource-category">${resource.category}</span>
+            </div>
+            <p class="resource-description">${resource.description}</p>
+            <div class="resource-meta">
+                <span class="meta-tag level">${resource.level}</span>
+                <span class="meta-tag cost">${resource.cost}</span>
+                <span class="meta-tag language">${resource.language}</span>
+            </div>
+            <a href="${resource.link}" target="_blank" class="resource-link">Visit Resource →</a>
+        </div>
+    `).join('');
 
-                return matchesCategory && matchesLevel && matchesCost && matchesLanguage && matchesSearch;
-            });
+    if (hasMore) {
+        container.innerHTML += `
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="reset-btn" onclick="loadMore()">Load More Resources</button>
+            </div>
+        `;
+    }
+}
 
-            renderResources();
-        }
+function loadMore() {
+    currentPage++;
+    renderResources();
+    window.scrollTo({ top: document.querySelector('.resources').offsetTop, behavior: 'smooth' });
+}
+
+function applyFilters() {
+    const category = document.getElementById('categoryFilter').value;
+    const level = document.getElementById('levelFilter').value;
+    const cost = document.getElementById('costFilter').value;
+    const language = document.getElementById('languageFilter').value;
+    const search = document.getElementById('searchBox').value.toLowerCase();
+
+    filteredResources = resources.filter(resource => {
+        const matchesCategory = !category || resource.category === category;
+        const matchesLevel = !level || resource.level === level;
+        const matchesCost = !cost || resource.cost === cost;
+        const matchesLanguage = !language || resource.language === language;
+        const matchesSearch = !search || 
+            resource.name.toLowerCase().includes(search) || 
+            resource.description.toLowerCase().includes(search);
+
+        return matchesCategory && matchesLevel && matchesCost && matchesLanguage && matchesSearch;
+    });
+
+    currentPage = 1;
+    renderResources();
+}
 
         function resetFilters() {
             document.getElementById('categoryFilter').value = '';
