@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Computing Resources</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .filters {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 0.9em;
+        }
+
+        select, input[type="text"] {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        select:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-box {
+            width: 100%;
+        }
+
+        .reset-btn {
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            align-self: flex-end;
+        }
+
+        .reset-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .resources {
+            display: grid;
+            gap: 20px;
+        }
+
+        .resource-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .resource-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .resource-title {
+            font-size: 1.4em;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .resource-category {
+            background: #667eea;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .resource-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .resource-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .meta-tag {
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+
+        .meta-tag.level {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .meta-tag.cost {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .meta-tag.language {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .resource-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .resource-link:hover {
+            background: #5568d3;
+            transform: translateX(5px);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 15px;
+            color: #666;
+        }
+
+        .no-results h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .stats {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .filter-row {
+                grid-template-columns: 1fr;
+            }
+
+            .resource-header {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌌 Quantum Computing Resources</h1>
+            <p class="subtitle">A curated collection of educational resources to learn and teach quantum computing</p>
+        </header>
+
+        <div class="filters">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label for="categoryFilter">Category</label>
+                    <select id="categoryFilter">
+                        <option value="">All Categories</option>
+                        <option value="Websites">📚 Websites</option>
+                        <option value="Hardware & Software">💻 Hardware & Software</option>
+                        <option value="Simulators">🔬 Simulators</option>
+                        <option value="Apps & Games">🎮 Apps & Games</option>
+                        <option value="Courses">🎓 Courses</option>
+                        <option value="Communities">👥 Communities & Initiatives</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="levelFilter">Level</label>
+                    <select id="levelFilter">
+                        <option value="">All Levels</option>
+                        <option value="Beginner">Beginner</option>
+                        <option value="Intermediate">Intermediate</option>
+                        <option value="Advanced">Advanced</option>
+                        <option value="All levels">All Levels</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="costFilter">Cost</label>
+                    <select id="costFilter">
+                        <option value="">All</option>
+                        <option value="Free">Free</option>
+                        <option value="Freemium">Freemium</option>
+                        <option value="Paid">Paid</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="languageFilter">Language</label>
+                    <select id="languageFilter">
+                        <option value="">All Languages</option>
+                        <option value="English">English</option>
+                        <option value="Spanish">Spanish</option>
+                        <option value="Multiple">Multiple</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label for="searchBox">Search</label>
+                    <input type="text" id="searchBox" class="search-box" placeholder="Search by name or description...">
+                </div>
+                <div class="filter-group">
+                    <label>&nbsp;</label>
+                    <button class="reset-btn" onclick="resetFilters()">Reset Filters</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats" id="stats"></div>
+
+        <div class="resources" id="resourcesContainer"></div>
+    </div>
+
+    <script>
+        const resources = [
+            // Websites
+            {
+                name: "Geeks for Geeks",
+                category: "Websites",
+                description: "Computer science portal with multiple articles on quantum computing including What is Quantum AI, Uses of Quantum Numbers, Real Life Applications of Quantum Mechanics, and more.",
+                link: "https://www.geeksforgeeks.org/",
+                level: "Beginner",
+                language: "English",
+                cost: "Free"
+            },
+            {
+                name: "GeoGebra",
+                category: "Websites",
+                description: "Online platform with over 1 million educational resources including simulators, calculators, and interactive coordinate systems for learning mathematics and supporting STEM education.",
+                link: "https://www.geogebra.org/",
+                level: "All levels",
+                language: "Multiple",
+                cost: "Free"
+            },
+            {
+                name: "QPlayLearn",
+                category: "Websites",
+                description: "Educational platform developed by quantum physics professionals offering resources to introduce quantum physics to all audiences.",
+                link: "https://qplaylearn.com/",
+                level: "Beginner",
+                language: "Multiple",
+                cost: "Free"
+            },
+            {
+                name: "Qureca",
+                category: "Websites",
+                description: "Offers online courses from beginner levels and the ¡Qureka! Box, a tangible teaching tool for quantum computing education.",
+                link: "https://www.qureca.com/es/",
+                level: "Beginner",
+                language: "English",
+                cost: "Freemium"
+            },
+            {
+                name: "qBraid",
+                category: "Websites",
+                description: "Online platform allowing access to quantum software and hardware from one place. Includes QBOOK learning platform, LAB practice environment, and RUNTIME modular system.",
+                link: "https://www.qbraid.com/",
+                level: "Beginner",
+                language: "English",
+                cost: "Freemium"
+            },
+
+            // Hardware & Software
+            {
+                name: "SpinQ",
+                category: "Hardware & Software",
+                description: "Develops nuclear magnetic resonance quantum computers for educational purposes, allowing students to interact with real quantum hardware safely and accessibly.",
+                link: "https://www.spinquanta.com/",
+                level: "All levels",
+                language: "English",
+                cost: "Paid"
+            },
+            {
+                name: "Qiskit",
+                category: "Hardware & Software",
+                description: "IBM's software for programming quantum computers. The Quantum ecosystem includes tutorials, guides, libraries and other tools supporting quantum computing education.",
+                link: "https://www.ibm.com/quantum/qiskit",
+                level: "Beginner",
+                language: "English",
+                cost: "Free"
+            },
+
+            // Simulators
+            {
+                name: "PhET Interactive Simulations",
+                category: "Simulators",
+                description: "Repository of over 100 interactive simulators for learning and teaching science. Features 4 quantum-specific simulators and 64 general physics simulations.",
+                link: "https://phet.colorado.edu",
+                level: "Beginner",
+                language: "Multiple",
+                cost: "Free"
+            },
+            {
+                name: "QuVis",
+                category: "Simulators",
+                description: "Interactive simulations site for teaching and learning quantum mechanics from a basic level.",
+                link: "https://www.st-andrews.ac.uk/physics/quvis/",
+                level: "Beginner",
+                language: "English",
+                cost: "Free"
+            },
+            {
+                name: "Quantum Composer",
+                category: "Simulators",
+                description: "Interactive tool to visualize and simulate quantum mechanics concepts and systems.",
+                link: "https://www.quatomic.com/composer/",
+                level: "Intermediate",
+                language: "English",
+                cost: "Free"
+            },
+            {
+                name: "Virtual Lab (Quantum Flytrap)",
+                category: "Simulators",
+                description: "Interactive online simulator for exploring quantum phenomena with intuitive interface. Simulates up to 4 entangled photons, quantum computing algorithms and protocols.",
+                link: "https://lab.quantumflytrap.com/lab?mode=waves",
+                level: "All levels",
+                language: "English",
+                cost: "Free"
+            },
+            {
+                name: "Virtual Optics Laboratory",
+                category: "Simulators",
+                description: "Optical phenomena simulator with simple interface and usage.",
+                link: "https://www.vqol.org/",
+                level: "Beginner",
+                language: "English",
+                cost: "Free"
+            },
+
+            // Apps & Games
+            {
+                name: "Endless Fun in High Dimensions",
+                category: "Apps & Games",
+                description: "Digital card game including software to calculate results.",
+                link: "https://zenodo.org/records/4016359",
+                level: "Intermediate",
+                language: "English",
+                cost: "Free"
+            },
+            {
+                name: "Escape Quantum",
+                category: "Apps & Games",
+                description: "Game from QPlayLearn to understand quantum measurement. Shows objects that change position when not observed and remain the same when observed.",
+                link: "https://qplaylearn.com/game-escapequantum",
+                level: "Beginner",
+                language: "Multiple",
+                cost: "Free"
+            },
+            {
+                name: "Hello Quantum",
+                category: "Apps & Games",
+                description: "Block-building and puzzle game designed to teach basic quantum computing concepts.",
+                link: "https://www.gameloop.com/game/educational/com.ibm.research.helloquantum",
+                level: "Beginner",
+                language: "English",
+                cost: "Free"
+            },
+            {
+                name: "Particle in a Box",
+                category: "Apps & Games",
+                description: "QPlayLearn game to understand the particle confined in a box problem. Visualize and interact with potentials, quantum states, energy levels, quantization, wave functions and probability.",
+                link: "https://qplaylearn.com/game-particle-in-a-box",
+                level: "Intermediate",
+                language: "Multiple",
+                cost: "Free"
+            },
+            {
+                name: "Phyphox",
+                category: "Apps & Games",
+                description: "Mobile app that turns your smartphone into a portable physics laboratory. Uses phone sensors to perform real-time scientific experiments.",
+                link: "https://phyphox.org/",
+                level: "All levels",
+                language: "Multiple",
+                cost: "Free"
+            },
+            {
+                name: "Potatoes Quest",
+                category: "Apps & Games",
+                description: "Arcade-style game from QPlayLearn to familiarize with concepts like tunneling effect, Heisenberg principle, and wave behavior.",
+                link: "https://qplaylearn.com/game-potatoes-quest",
+                level: "Beginner",
+                language: "Multiple",
+                cost: "Free"
+            },
+            {
+                name: "Psi and Delta",
+                category: "Apps & Games",
+                description: "QPlayLearn game to understand quantum concepts like duality, superposition, uncertainty principle, and wave function collapse.",
+                link: "https://qplaylearn.com/game-psi-and-delta",
+                level: "Beginner",
+                language: "Multiple",
+                cost: "Free"
+            },
+            {
+                name: "Quantum Chess",
+                category: "Apps & Games",
+                description: "Chess version incorporating mechanics inspired by quantum physics principles.",
+                link: "https://quantumchess.net/quantum-chess/",
+                level: "Intermediate",
+                language: "English",
+                cost: "Free"
+            },
+            {
+                name: "Quantum Odyssey",
+                category: "Apps & Games",
+                description: "Highly visual game to learn about quantum computing. Features puzzles and explanations of quantum concepts.",
+                link: "https://www.quarksinteractive.com/quantum-odyssey",
+                level: "Beginner",
+                language: "English",
+                cost: "Free"
+            },
+            {
+                name: "Quantum Playground",
+                category: "Apps & Games",
+                description: "QPlayLearn game to visualize key quantum physics concepts like quantum states, superposition, interference and Schrödinger's equation through particle creation and measurement.",
+                link: "https://qplaylearn.com/quantum-playground",
+                level: "Beginner",
+                language: "Multiple",
+                cost: "Free"
+            },
+            {
+                name: "Quantum Solitaire",
+                category: "Apps & Games",
+                description: "QPlayLearn quantum version of solitaire to build intuition about quantum entanglement. Goal is to get all cards using the fewest hands possible.",
+                link: "https://qplaylearn.com/quantum-solitaire",
+                level: "Beginner",
+                language: "Multiple",
+                cost: "Free"
+            },
+            {
+                name: "Quantum TiqTaqToe",
+                category: "Apps & Games",
+                description: "QPlayLearn game with classic tic-tac-toe rules adding quantum components like superposition, entanglement and measurement by selecting the 'quantumness' level.",
+                link: "https://qplaylearn.com/game-tiqtaqtoe",
+                level: "Beginner",
+                language: "Multiple",
+                cost: "Free"
+            },
+            {
+                name: "Qwiz",
+                category: "Apps & Games",
+                description: "QPlayLearn game where as a wizard's apprentice, you move a liquid that functions under quantum mechanics laws. Citizen science project to solve open research problems.",
+                link: "https://qplaylearn.com/game-qwiz",
+                level: "Intermediate",
+                language: "Multiple",
+                cost: "Free"
+            },
+            {
+                name: "Q|Cards>",
+                category: "Apps & Games",
+                description: "Educational multiplayer mobile game from QPlayLearn to familiarize with quantum computing concepts interactively.",
+                link: "https://qplaylearn.com/game-qcards",
+                level: "Beginner",
+                language: "Multiple",
+                cost: "Free"
+            },
+            {
+                name: "Saving Photonland",
+                category: "Apps & Games",
+                description: "Helps build intuition about time-frequency modes and quantum pulse decomposition. Reconstruct photon pairs by adjusting amplitudes and reconstructing their modes.",
+                link: "https://qplaylearn.com/games/stormytune/",
+                level: "Advanced",
+                language: "English",
+                cost: "Free"
+            },
+            {
+                name: "Stranded",
+                category: "Apps & Games",
+                description: "Game in development to learn quantum computing basics through puzzles.",
+                link: "https://github.com/jowinjohnchemban/qkrishigame/",
+                level: "Beginner",
+                language: "English",
+                cost: "Free"
+            },
+
+            // Courses
+            {
+                name: "Brilliant",
+                category: "Courses",
+                description: "Educational platform with mobile app offering STEM courses. Features 2 introductory quantum courses: Quantum Mechanics with Sabine and Quantum Computing (Microsoft + Alphabet X).",
+                link: "https://brilliant.org/",
+                level: "Beginner",
+                language: "English",
+                cost: "Freemium"
+            },
+            {
+                name: "Quantum Computing for Everyone",
+                category: "Courses",
+                description: "Coursera course providing an introduction to quantum computing fundamentals.",
+                link: "https://www.coursera.org/learn/quantum-computing-for-everyone-an-introduction",
+                level: "Beginner",
+                language: "English",
+                cost: "Free"
+            },
+            {
+                name: "Complete Quantum Computing Course",
+                category: "Courses",
+                description: "Coursera specialization program for beginners covering complete quantum computing fundamentals.",
+                link: "https://www.coursera.org/specializations/packt-the-complete-quantum-computing-course-for-beginners",
+                level: "Beginner",
+                language: "English",
+                cost: "Free"
+            },
+            {
+                name: "Understanding Modern Physics II",
+                category: "Courses",
+                description: "Coursera course on quantum mechanics and atoms.",
+                link: "https://www.coursera.org/learn/understanding-modern-physics-2-quantum-mechanics-and-atoms",
+                level: "Intermediate",
+                language: "English",
+                cost: "Free"
+            },
+            {
+                name: "Practical Quantum Computing with IBM Qiskit",
+                category: "Courses",
+                description: "Coursera beginner's guide to practical quantum computing using IBM's Qiskit.",
+                link: "https://www.coursera.org/learn/packt-beginners-guide-to-practical-quantum-computing-with-ibm-qiskit-w6mos",
+                level: "Beginner",
+                language: "English",
+                cost: "Free"
+            },
+            {
+                name: "Fundamentals of Quantum Computing",
+                category: "Courses",
+                description: "edX course exploring the fundamentals of quantum computing.",
+                link: "https://acortar.link/gkFi28",
+                level: "Beginner",
+                language: "English",
+                cost: "Paid"
+            },
+            {
+                name: "Quantum for Everyone",
+                category: "Courses",
+                description: "Qureca course covering fundamentals, use cases, quantum-resistant security, and the quantum industry.",
+                link: "https://lms.qureca.com/product/quantum-for-everyone-2-0/",
+                level: "Beginner",
+                language: "English",
+                cost: "Paid"
+            },
+            {
+                name: "SheQuantum Courses",
+                category: "Courses",
+                description: "eLearning platform inspiring women and girls in quantum technologies. Courses include Practical Introduction to Quantum Computing, Quantum Information 101, and more via YouTube playlists.",
+                link: "https://shequantum.org/",
+                level: "Beginner",
+                language: "English",
+                cost: "Free"
+            },
+            {
+                name: "The Unconventional Computing Lab",
+                category: "Courses",
+                description: "Free online asynchronous course in Spanish on quantum computing. Requires high school calculus knowledge. Covers postulates, circuits, algorithms, and Turing machines.",
+                link: "https://unconventionalcomputing.org/",
+                level: "Intermediate",
+                language: "Spanish",
+                cost: "Free"
+            },
+            {
+                name: "Understanding Quantum Computers",
+                category: "Courses",
+                description: "Keio University course on FutureLearn covering key aspects of quantum computing. Topics include superposition, Shor's algorithm, Grover's algorithm, and quantum error correction.",
+                link: "https://www.futurelearn.com/courses/intro-to-quantum-computing",
+                level: "Beginner",
+                language: "English",
+                cost: "Freemium"
+            },
+            {
+                name: "Quantum Kitchen",
+                category: "Courses",
+                description: "Udemy course cooking up concepts in quantum computing for beginners.",
+                link: "https://www.udemy.com/course/quantum-computing-kitchen/",
+                level: "Beginner",
+                language: "English",
+                cost: "Paid"
+            },
+            {
+                name: "Quantum Computing on AWS",
+                category: "Courses",
+                description: "Udemy course on quantum computing using Amazon Braket for beginners.",
+                link: "https://www.udemy.com/course/quantum-computing-on-aws-for-beginners-amazon-braket/",
+                level: "Beginner",
+                language: "English",
+                cost: "Paid"
+            },
+            {
+                name: "AI & Quantum Computing Mastery",
+                category: "Courses",
+                description: "Udemy bootcamp covering AI and quantum computing from zero to expert level.",
+                link: "https://www.udemy.com/course/ai-quantum-computing-mastery-from-zero-to-expert-bootcamp/",
+                level: "Beginner",
+                language: "English",
+                cost: "Paid"
+            },
+
+            // Communities
+            {
+                name: "American Association of Physics Teachers",
+                category: "Communities",
+                description: "Association dedicated to teachers, sharing K-12 resources including quantum physics. Partner of National Q-12 Education Partnership. Offers competitions, teaching resources, and funding information.",
+                link: "https://aapt.org/K12/index.cfm",
+                level: "All levels",
+                language: "English",
+                cost: "Free"
+            },
+            {
+                name: "DigiQ",
+                category: "Communities",
+                description: "Part of QTEdu offering Master's programs in quantum technologies and shorter courses. Created educational tools in collaboration with universities including ScienceAtHome, Quantum Odyssey, QPlayLearn, and SpinDrops.",
+                link: "https://digiq.hybridintelligence.eu/",
+                level: "Advanced",
+                language: "Multiple",
+                cost: "Paid"
+            },
+            {
+                name: "National Q-12 Education Partnership",
+                category: "Communities",
+                description: "US government initiative promoting quantum education in K-12 levels. Features K-12 QIS Framework, QuanTime activities, and Quantum Education Forum.",
+                link: "https://q12education.org/",
+                level: "All levels",
+                language: "English",
+                cost: "Free"
+            },
+            {
+                name: "OnRamps",
+                category: "Communities",
+                description: "University of Texas initiative preparing K-12 students for university. Offers courses including Introduction to Quantum Technologies with university credits.",
+                link: "https://onramps.utexas.edu/",
+                level: "All levels",
+                language: "English",
+                cost: "Free"
+            },
+            {
+                name: "QTEdu",
+                category: "Communities",
+                description: "Educational branch of European Quantum Flagship creating learning ecosystem for quantum technologies. Provides EU school curricula, programs, assessment tools, and materials.",
+                link: "https://qtedu.eu/",
+                level: "All levels",
+                language: "Multiple",
+                cost: "Free"
+            },
+            {
+                name: "QWorld",
+                category: "Communities",
+                description: "Non-profit organization bringing together quantum researchers to popularize quantum technologies. Conducts projects, events and courses. Hosts annual meetings, QJam, hackathons, and intro courses.",
+                link: "https://qworld.net/",
+                level: "All levels",
+                language: "Multiple",
+                cost: "Free"
+            },
+            {
+                name: "Quantum Open-Source Foundation",
+                category: "Communities",
+                description: "QOSF transmits quantum computing fundamentals to the general population. Repository includes learning resources, MOOCs, development tools, blogs, books, papers, and videos.",
+                link: "https://qosf.org/learn_quantum/",
+                level: "All levels",
+                language: "English",
+                cost: "Free"
+            },
+            {
+                name: "Quantum for Everyone",
+                category: "Communities",
+                description: "Initiative creating resources bringing quantum to teachers, students and enthusiasts. Features Quantum Picturalism - a visual, accessible and rigorous way to represent quantum mathematics.",
+                link: "https://quantuminpictures.org/",
+                level: "All levels",
+                language: "English",
+                cost: "Free"
+            },
+            {
+                name: "Quantum for All",
+                category: "Communities",
+                description: "Offers quantum physics camps for students and training for teachers.",
+                link: "https://quantumforall.org/",
+                level: "All levels",
+                language: "English",
+                cost: "Paid"
+            },
+            {
+                name: "Qubit by Qubit",
+                category: "Communities",
+                description: "The Coding School initiative teaching quantum computing to K-16 students (up to 22 years). Programs include Introduction to Quantum Computing with Google Quantum AI and teacher professional development.",
+                link: "https://www.qubitbyqubit.org/",
+                level: "Beginner",
+                language: "English",
+                cost: "Free"
+            }
+        ];
+
+        let filteredResources = [...resources];
+
+        function renderResources() {
+            const container = document.getElementById('resourcesContainer');
+            const stats = document.getElementById('stats');
+            
+            if (filteredResources.length === 0) {
+                container.innerHTML = `
+                    <div class="no-results">
+                        <h3>No resources found</h3>
+                        <p>Try adjusting your filters or search terms</p>
+                    </div>
+                `;
+                stats.textContent = 'No resources match your filters';
+                return;
+            }
+
+            stats.textContent = `Showing ${filteredResources.length} of ${resources.length} resources`;
+
+            container.innerHTML = filteredResources.map(resource => `
+                <div class="resource-card">
+                    <div class="resource-header">
+                        <h2 class="resource-title">${resource.name}</h2>
+                        <span class="resource-category">${resource.category}</span>
+                    </div>
+                    <p class="resource-description">${resource.description}</p>
+                    <div class="resource-meta">
+                        <span class="meta-tag level">${resource.level}</span>
+                        <span class="meta-tag cost">${resource.cost}</span>
+                        <span class="meta-tag language">${resource.language}</span>
+                    </div>
+                    <a href="${resource.link}" target="_blank" class="resource-link">Visit Resource →</a>
+                </div>
+            `).join('');
+        }
+
+        function applyFilters() {
+            const category = document.getElementById('categoryFilter').value;
+            const level = document.getElementById('levelFilter').value;
+            const cost = document.getElementById('costFilter').value;
+            const language = document.getElementById('languageFilter').value;
+            const search = document.getElementById('searchBox').value.toLowerCase();
+
+            filteredResources = resources.filter(resource => {
+                const matchesCategory = !category || resource.category === category;
+                const matchesLevel = !level || resource.level === level;
+                const matchesCost = !cost || resource.cost === cost;
+                const matchesLanguage = !language || resource.language === language;
+                const matchesSearch = !search || 
+                    resource.name.toLowerCase().includes(search) || 
+                    resource.description.toLowerCase().includes(search);
+
+                return matchesCategory && matchesLevel && matchesCost && matchesLanguage && matchesSearch;
+            });
+
+            renderResources();
+        }
+
+        function resetFilters() {
+            document.getElementById('categoryFilter').value = '';
+            document.getElementById('levelFilter').value = '';
+            document.getElementById('costFilter').value = '';
+            document.getElementById('languageFilter').value = '';
+            document.getElementById('searchBox').value = '';
+            applyFilters();
+        }
+
+        // Event listeners
+        document.getElementById('categoryFilter').addEventListener('change', applyFilters);
+        document.getElementById('levelFilter').addEventListener('change', applyFilters);
+        document.getElementById('costFilter').addEventListener('change', applyFilters);
+        document.getElementById('languageFilter').addEventListener('change', applyFilters);
+        document.getElementById('searchBox').addEventListener('input', applyFilters);
+
+        // Initial render
+        renderResources();
+    </script>
+</body>
+</html>
